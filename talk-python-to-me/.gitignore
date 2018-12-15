@@ -1,0 +1,6 @@
+# Ignore IDE and virtual env files and directories for repo submission
+
+.vscode/
+__pycache__/
+bin/
+pyvenv.cfg

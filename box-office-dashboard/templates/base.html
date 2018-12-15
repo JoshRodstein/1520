@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Box Office Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+
+<body>
+    <h1>Box Office Dashboard</h1>
+
+    <div class='dashboard-grid'>
+        <div id='top-ten-movies'>
+            <h2>Top 10 Highest Grossing Films</h2>
+            <h4>Avg: <span id="gross-average"></span></h4>
+            <ol id="gross-movies">
+            </ol>
+        </div>
+
+        <div id='top-ten-movies-by-studio'>
+            <h2>Top 10 by <span id="studio-name">Studio</span>
+                <select id='studio-select'>
+                </select>
+            </h2>
+            <h4>Avg: <span id="studio-average"></span></h4>
+            <ol id='studio-movies'>
+            </ol>
+        </div>
+
+        <div id='top-ten-movies-by-opening-weekend'>
+            <h2>Top 10 by Opening Weekend Gross</h2>
+            <h4>Avg: <span id="opening-average"></span></h4>
+            <ol id="opening-movies">
+            </ol>
+        </div>
+
+        <div id='movie-list-complete'></div>
+    </div>
+    <script>
+        var movies;
+        var grossAvg;
+        var openGrossAvg;
+        var studioGrossAvg;
+        var selectStudio;
+
+        // Helper function to format numbers with commas and '$'.
+        function formatNumbers(number, currency) {
+            if (number) {
+                number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (currency) {
+                    number = '$' + number;
+                }
+            }
+            return number
+        }
+
+        function grabGrabAtt(attName) {
+            function rv(item) {
+                return item[attName];
+            }
+            return rv;
+        }
+
+        function add(a, b) {
+            return a + b;
+        }
+
+        function avgAcrossArray(arr) {
+            console.log(typeof(arr))
+            return average(arr.reduce(add), arr.length);
+        }
+
+        function average(total, count) {
+            return total / count;
+        }
+
+        // Get the movies via AJAX from API collection once DOM Content is all loaded.
+        document.addEventListener('DOMContentLoaded', function() {
+            grossAvg = document.querySelector("#gross-average");
+            openGrossAvg = document.querySelector("#opening-average");
+            studioGrossAvg = document.querySelector("#studio-average");
+
+            var request = new XMLHttpRequest();
+
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        movies = JSON.parse(request.responseText);
+                        // Use a custom event to trigger the population of when
+                        // they are loaded.
+                        window.dispatchEvent(new Event('moviesLoaded'));
+                    }
+                }
+            }
+
+            request.open('GET', "{{ url_for('movies') }}");
+            request.send();
+        });
+
+        ///////////////////////////////////////////////////////////////////
+        // Top 10 Films By Gross Overall
+        document.querySelector("#studio-select").addEventListener("change", function (e) {
+            var movieListStudioDiv = document.getElementById('studio-movies');
+            var studioAvg = document.getElementById('studio-average');
+            studioAvg.textContent = "";
+
+            while (movieListStudioDiv.firstChild) {
+                movieListStudioDiv.removeChild(movieListStudioDiv.firstChild);
+            }
+            selectStudio = document.getElementById("studio-select").value;
+
+            if (selectStudio != "") {
+                console.log(selectStudio)
+                var studioMovieTable = document.createElement('table');
+                var studioHeader = document.createElement('tr');
+                
+                studio_gross_movies = movies.filter(function (item, index, array){
+                    return item.studio === String(selectStudio)
+                });
+                studio_gross_movies = studio_gross_movies.slice().sort(function(a, b) {
+                    return b.total_gross - a.total_gross;
+                });
+                studio_gross_movies.slice(0, 10).forEach(function(item, idx, arr) {
+                    var mRow = document.createElement('tr');
+                    var mTitle = document.createElement('td');
+                    var mStudioGross = document.createElement('td');
+
+                    mTitle.textContent = item.title;
+                    mStudioGross.textContent = formatNumbers(item.total_gross, true);
+
+                    mRow.append(mTitle);
+                    mRow.append(mStudioGross);
+
+                    studioMovieTable.append(mRow);
+                });
+                grosses = studio_gross_movies.slice(0,10).map(grabGrabAtt("total_gross"));
+                var avgGross = avgAcrossArray(grosses);
+                studioGrossAvg.textContent = formatNumbers(avgGross.toFixed(2), true);
+
+                movieListStudioDiv.append(studioMovieTable);
+            }
+        });
+
+        // Load the table of all movies.
+        var movieListCompleteDiv = document.getElementById('movie-list-complete');
+
+        // Custom event handler fired once movies are all loaded via AJAX.
+        window.addEventListener('moviesLoaded', function(e) {
+
+            // populate studios select list
+            var studios = movies.map(item => item.studio).filter((value, index, self) => self.indexOf(value) === index);
+            var select = document.querySelector("#studio-select");
+            var blank_option = document.createElement("option");
+            blank_option.text = " ";
+            select.add(blank_option);
+            studios.slice().sort().forEach(function(item, idx, arr) { 
+                var option = document.createElement("option");
+                option.text = item;
+                select.add(option);
+            });
+
+
+            var movieTable = document.createElement('table');
+            var header = document.createElement('tr');
+
+            var titleHead = document.createElement('th');
+            titleHead.textContent = 'Title';
+
+            var studioHead = document.createElement('th');
+            studioHead.textContent = 'Studio';
+
+            var totalGrossHead = document.createElement('th');
+            totalGrossHead.textContent = 'Total Gross';
+
+            var totalTheatersHead = document.createElement('th');
+            totalTheatersHead.textContent = 'Total Theaters';
+
+            var openingGrossHead = document.createElement('th');
+            openingGrossHead.textContent = 'Opening Gross';
+
+            var openingTheatersHead = document.createElement('th');
+            openingTheatersHead.textContent = 'Opening Theaters';
+
+            header.append(titleHead);
+            header.append(studioHead);
+            header.append(totalGrossHead);
+            header.append(totalTheatersHead);
+            header.append(openingGrossHead);
+            header.append(openingTheatersHead);
+            movieTable.append(header);
+            
+
+            ///////////////////////////////////////////////////////////////////
+            // Top 10 Films By Gross Overall
+            var movieListGrossDiv = document.getElementById('gross-movies');
+            var grossMovieTable = document.createElement('table');
+
+            top_gross_movies = movies.slice().sort(function(a, b) {
+                  return b.total_gross - a.total_gross
+            });
+            top_gross_movies.slice(0, 10).forEach(function(item, idx, arr) {
+                var mRow = document.createElement('tr');
+                var mTitle = document.createElement('td');
+                var mTotalGross = document.createElement('td');
+
+                mTitle.textContent = item.title;
+                mTotalGross.textContent = formatNumbers(item.total_gross, true);
+
+                mRow.append(mTitle);
+                mRow.append(mTotalGross);
+
+                grossMovieTable.append(mRow);
+            });
+            grosses = top_gross_movies.slice(0,10).map(grabGrabAtt("total_gross"));
+            var avgGross = avgAcrossArray(grosses);
+            grossAvg.textContent = formatNumbers(avgGross.toFixed(2), true);
+
+            ///////////////////////////////////////////////////////////////////
+            // Top 10 Films by Opening Gross
+            var movieListOpeningDiv = document.getElementById('opening-movies');
+            var openGrossMovieTable = document.createElement('table');
+
+            open_gross_movies = movies.slice().sort(function(a, b) {
+                  return b.opening_gross - a.opening_gross;
+            });
+            open_gross_movies.slice(0, 10).forEach(function(item, idx, arr) {
+                var mRow = document.createElement('tr');
+                var mTitle = document.createElement('td');
+                var mOpenGross = document.createElement('td');
+
+                mTitle.textContent = item.title;
+                mOpenGross.textContent = formatNumbers(item.opening_gross, true);
+
+                mRow.append(mTitle);
+                mRow.append(mOpenGross);
+
+                openGrossMovieTable.append(mRow);
+            });
+            grosses = open_gross_movies.slice(0,10).map(grabGrabAtt("opening_gross"));
+            var avgGross = avgAcrossArray(grosses);
+            openGrossAvg.textContent = formatNumbers(avgGross.toFixed(2), true);
+
+            ///////////////////////////////////////////////////////////////////
+            // All Movie List
+
+            movies.forEach(function(item, idx, arr) {
+                var mRow = document.createElement('tr');
+                var mTitle = document.createElement('td');
+                var mStudio = document.createElement('td');
+                var mTotalGross = document.createElement('td');
+                var mTotalTheaters = document.createElement('td');
+                var mOpeningGross = document.createElement('td');
+                var mOpeningTheaters = document.createElement('td');
+
+                mTitle.textContent = item.title;
+                mStudio.textContent = item.studio;
+                mTotalGross.textContent = formatNumbers(item.total_gross, true);
+                mTotalTheaters.textContent = formatNumbers(item.total_theaters, false);
+                mOpeningGross.textContent = formatNumbers(item.opening_gross, true);
+                mOpeningTheaters.textContent = formatNumbers(item.opening_theaters, false);
+
+                mRow.append(mTitle);
+                mRow.append(mStudio);
+                mRow.append(mTotalGross);
+                mRow.append(mTotalTheaters);
+                mRow.append(mOpeningGross);
+                mRow.append(mOpeningTheaters);
+
+                movieTable.append(mRow);
+            });
+
+            movieListCompleteDiv.append(movieTable);
+            movieListGrossDiv.append(grossMovieTable);
+            movieListOpeningDiv.append(openGrossMovieTable);
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+.vscode
+__pycache__
+connect4.db
+bin/
+lib/
+include/
+*pycache*
+.vscode
+*flask*
+*.pyc*
+*fl*.py 

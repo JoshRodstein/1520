@@ -1,0 +1,28 @@
+{% extends "baseProfile.html" %}
+
+{% block title %}Your profile! - {{ super() }}{% endblock %}
+
+{% block body %}
+    <h2>Stylist's</h2>
+    <ul id="stylist_menu">
+        {% set messages = get_flashed_messages() %}
+        {% for s in styls %}
+        <li><a href="{{ url_for("profile", username=s.username) }}">{{ s.username }}</a></li>
+        {% endfor %}
+    </ul>
+    <h2>{{ user.username }}'s Upcoming Appointments</h2>   
+    <ul id="appointment_list">
+        {% for a in appts %}
+            <li>{{ a.date }} w/ <a href="{{ url_for("profile", username=a.stylist) }}">{{ a.stylist }}</a>
+                {% if user.username == session["username"] %}
+                <a href="{{ url_for("cancel", args={"year": a.date.year, "month": a.date.month, "day": a.date.day, "time": a.date.hour, "stylist": a.stylist}) }}" style="margin-left: 20px">Cancel</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        {% if messages %}
+            {% for message in messages %}
+            <a style="margin-top: 20px">Canceled Appt on {{ message }}</a>
+            {% endfor %}
+        {% endif %}
+    </ul>
+{% endblock %}

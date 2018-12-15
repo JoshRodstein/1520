@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+   <title>Connect Four</title>
+   <link rel="stylesheet" href="./css/connectfour.css" type="text/css">
+ </head>
+ <body>
+
+
+    <header>
+       <a href="index.html" id="menu"></a>
+       <nav>
+         <a href="#" id="menu-icon"></a>
+         <ul>
+           <li id="new-game"><a href="#" >New Game</a></li>
+         </ul>
+       </nav>
+   </header>
+  <!--End of Nav Header-->
+
+  
+   <section class="one-half" id="intro">
+        <div id="welcome" class="banner">
+            <p>Welcome to Connect Four</p>
+        </div>
+        <form id="playerInfo" action="#">
+                <table id="formTable">
+                        <tr id="header">
+                            <th id="prompt" data-player='1'>
+                                Enter info for Player 1!
+                            </th>
+                        </tr>
+                        <tr id="nickname">
+                            <td id="input">
+                                <label> Nickname </label>
+                                <input id="nnInput" type="text" name="nickname"/>
+                            </td>
+                        </tr>
+                        </br>
+                        <tr id="birthday">
+                            <td id="input">
+                                <label> Birthdate </label>
+                                <input id="bdInput" type="text" name="birthdate"/>
+                            </td>
+                        </tr>
+                        <tr id="button">
+                            <td id="submit-button">
+                             <button id="submit" type="button" onClick="gatherInfo()" name="submit">Submit</button>
+                            </td>
+                        </tr>
+
+                </table>
+
+        </form>
+   </section>
+
+   <section id="top_half" class="one-half">
+
+     <div class="sub-header" id="game-info">
+       <div id="timer" class="widget" >
+         <span id="seconds">00</span>
+         :
+         <span id="tens">00</span>
+        </div>
+     </div>
+
+     <div class="main-col" id="3t">
+
+       <div class="info" id="p1">
+         <p id="p1-display-name">Player 1</p>
+        <div class="scoring" id="p1-scoring">
+           <ul class="info-list" id="p1-list">
+            <li class="info-item" id="token-count">
+             <div class="item-field-label" id="tc-label"><p>Tokens</p></div>
+             <div class="item-field-data" id="p1-tc-count-data"><p id="p1-tc-count-data-p"></p></div>
+            </li>
+            <li class="info-item" id="prev-move">
+             <div class="item-field-label" id="prev-move-label"><p>Last Move</p></div>
+             <div class="item-field-data" id="p1-prev-move-data"><p id="p1-prev-move-data-p"></p></div>
+            </li>
+           </ul>
+        </div>
+       </div>
+
+       <div class="board" id="squares-div">
+               <div id="alpha" class="coordinates">
+                 <div id="alpha-corner" class="marker"><p></p></div>
+                 <div id="A" class="marker">A</div>
+                 <div id="B" class="marker">B</div>
+                 <div id="C" class="marker">C</div>
+                 <div id="D" class="marker">D</div>
+                 <div id="E" class="marker">E</div>
+                 <div id="F" class="marker">F</div>
+                 <div id="G" class="marker">G</div>
+               </div>
+                <div id="numeric" class="coordinates">
+                  <div id="num-corner" class="marker"><p></p></div>
+                  <div id="1" class="marker">1</div>
+                  <div id="2" class="marker">2</div>
+                  <div id="3" class="marker">3</div>
+                  <div id="4" class="marker">4</div>
+                  <div id="5" class="marker">5</div>
+                  <div id="6" class="marker">6</div>
+                </div>
+                <div id="cells" class="board"></div>
+        </div>
+
+        <div class="info" id="p2">
+         <p id="p2-display-name">Player 2</p>
+         <div class="scoring" id="p2-scoring">
+           <ul class="info-list" id="p2-list">
+            <li class="info-item" id="token-count">
+             <div class="item-field-label" id="tc-label"><p>Tokens</p></div>
+             <div class="item-field-data" id="p2-tc-count-data"><p id="p2-tc-count-data-p"></p></div>
+            </li>
+            <li class="info-item" id="prev-move">
+             <div class="item-field-label" id="prev-move-label"><p>Last Move</p></div>
+             <div class="item-field-data" id="p2-prev-move-data"><p id="p2-prev-move-data-p"></p></div>
+            </li>
+           </ul>
+         </div>
+        </div>
+
+      </div>
+    </section>
+    <section class="one-half" id="high-scores">
+      <div class="scores" id="list-wrapper">
+        <header id="scores-header">Top Scores</header>
+        <ol class="list" id="scores-list">
+        </ol>
+      </div>
+    </section>
+
+   <section id="js" class="scripts">
+        <script type="text/javascript" src="./js/connectfour.js"></script>
+
+   </section>
+
+   </body>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Login {{ super() }}{% endblock %}
+
+
+{% block content %}
+
+<h1>Login</h1>
+<form action="" method="post">
+    Username:  <input type="text" name="user" />
+    <br />
+    Password:  <input type="text" name="pass" />
+    <br />
+    {% if create %}
+    Password:  <input type="text" name="bday" />
+    <br />
+    {% endif %}
+    {% block button %}
+    {% if not create %}
+    <input type="submit" name="submit_button" value="Login" />
+    {% endif %}
+    <input type="submit" name="submit_button" value="Create Account" />
+    {% endblock %}
+</form>
+{% endblock %}

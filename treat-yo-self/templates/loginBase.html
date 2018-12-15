@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        {% block title %}Base Logon Template{% endblock %}
+	</head>
+	<body>
+        {% set messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <p style="margin-top: 20px">{{ message }}</p>
+        {% endfor %} 
+        {% endif %}         
+        <form action="" method="post">
+                Username:  <input type="text" name="user" />
+                <br />
+                Password:  <input type="text" name="pass" />
+                <br />
+                {% block button %}
+                Default Submission Button Block
+                {% endblock %}
+        </form>
+	</body>
+</html>

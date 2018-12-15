@@ -1,0 +1,28 @@
+{% extends "baseProfile.html" %}
+
+{% block title %}Your profile! - {{ super() }}{% endblock %}
+
+{% block menu %}
+    {% if session["username"] == "owner" %}
+        {{ super() }}    |    <a href="{{ url_for("register") }}">New Stylist</a>
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+    <h2>Stylist's Appoinments</h2>
+    <ul id="stylist_menu">
+        {% for s in styls %}
+        <li><a href="{{ url_for("profile", username=s.username) }}">{{ s.username }}</a></li>
+        <ul>
+            {% if s.username in appts.keys() %}
+                {% for a in appts[s.username] %}
+                <li>{{ a.date }} w/ <a href="{{ url_for("profile", username=a.patron) }}">{{ a.patron }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li>No Appointments Currently Booked</li>
+            {% endif %}
+        </ul>
+        {% endfor %}
+    </ul>
+{% endblock %}

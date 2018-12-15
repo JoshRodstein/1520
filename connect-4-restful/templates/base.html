@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %} - Connect 4{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"</link>
+    {% block extra_css %}
+    {% endblock %}
+  </head>
+  <header> 
+    {% block header %}
+      {% if "username" in session %}
+      <a style="text-decoration:none;" href="{{ url_for('logout') }}">Logout</a> 
+      {% endif %}
+    {% endblock %}
+  </header>
+  <body>
+    <div class="content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    {% block extra_js %}
+    {% endblock %}
+  </body>
+</html>

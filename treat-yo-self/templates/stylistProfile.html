@@ -1,0 +1,67 @@
+{% extends "baseProfile.html" %}
+
+{% block title %}Your profile! - {{ super() }}{% endblock %}
+
+{% block body %}
+    <style>
+    div #cal-wrapper {
+        background-color:lightcyan;
+    } 
+    div #calendar_day_False {
+        background-color: lightgreen;
+    } 
+    div #calendar_day_False:hover {
+        background-color:khaki;
+    } 
+    div #calendar_day_True {
+        background-color:lightcoral;
+    }
+    div #calendar_day_True:hover {
+        background-color:lightgray;
+    } 
+    </style>
+    <h2>Stylist Calendar</h2>
+    <div id="cal-wrapper" style="width:fit-content;white-space:nowrap;overflow-x: hidden;">
+        {% for day in calendar %}
+        <table class="day_table" style="display:inline;text-align:left;border:none">
+            <tr>
+                <th>{{ day }}</th>
+            </tr>
+            {% for hr in calendar[day] %}
+            <tr>
+                <td> 
+                    <!-- Set links and calendar -->
+                    {% if hr.booked == True and session["username"] != user.username %}
+                    <a class="link" style="width:fit-content;height:fit-content;text-decoration:none;">
+                    {% elif hr.booked == True %}
+                    <a class="link" href="{{ url_for("profile", username=hr.patron ) }}" style="width:fit-content;height:fit-content;text-decoration:none;">
+                    {% else %}
+                    {% set argus = {"year": hr.year, "month": hr.month, "day": hr.day, "hour": hr.hour, "stylist": user.username, "patron": hr.patron} %}
+                    <a class="link" href="{{ url_for("book", args=argus ) }}" style="width:fit-content;height:fit-content;text-decoration:none;">
+                    {% endif %}
+                        <div id="calendar_day_{{ hr.booked }}" style="width: 110px; min-height: 20px; height: fit-content;text-align: left">
+                            <label>{{ hr.hour }}:00</label>
+                            <ul style="list-style-type: none;margin: 0;padding: 5px">
+                                {% if user.username == username or session["username"] == "owner" %}
+                                    {% if hr.booked == True %}
+                                        <li>w/ {{ hr.patron }}</li>
+                                    {% else %}
+                                        <li>Available</li>
+                                    {% endif %}
+                                {% else %}
+                                    {% if hr.booked == True %}
+                                        <li>Booked</li>
+                                    {% else %}
+                                        <li>Available</li>
+                                    {% endif %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endfor %}
+    </div>
+{% endblock %}

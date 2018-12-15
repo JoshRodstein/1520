@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Game Board {{ super() }}{% endblock %}
+{% block header %}<a id="new_game" style="text-decoration:none;" href="#">New Game</a> | {{ super() }}{% endblock %}
+
+{% block content %}
+<h1>Games</h1>
+<ul id="game_list"></ul>
+{% if player_id %}
+<h2>User Top Scores</h2>
+<ul id="user_top10">
+</ul>
+{% endif %}
+<h2>Community Top Scores</h2>
+<ul id="all_top10">
+</ul>
+{% endblock %}
+{% block extra_js %}
+{% set pid = player_id %}
+
+<script>
+window.onload = function() {
+    console.log("The eagle has landed");
+    var pid = "pid";
+    console.log("pid")
+    sessionStorage.setItem("pid", "{{ player_id }}")
+    gameListPoller();
+    allTop10Poller();
+    userTop10Poller();
+}
+var elm = document.getElementById("new_game").addEventListener("click", function(e) {
+    var player2 = prompt("Enter a name for player 2");
+    var player1 = "{{ session['username'] }}";   
+    var result = newGame(player1, player2);
+});
+</script>
+{% if not pid %}
+<a id="login" style="text-decoration:none;" href="{{ url_for('login')}}">Login</a>
+{% endif %}
+{% endblock %}

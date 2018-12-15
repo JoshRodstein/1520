@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Logged in as {{ session["username"] }}</title>
+	</head>
+	<body>
+		<h1>{{ user.username}}'s Profile</h1>
+		<div style="display:inline-block">
+			{% block menu %}
+			<a href="{{ url_for("logout") }}">Logout</a>
+			{% endblock %}
+		</div>
+		<div>
+		<p>
+			{% block body %}
+			This is the base Body content for the profile template
+			{% endblock %}
+		</p>
+		</div>
+	</body>
+</html>

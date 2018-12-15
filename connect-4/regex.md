@@ -1,0 +1,2 @@
+## regex for dates (in dev)
+^((0?[1-9])|(1[123]?)|(January)|(Jan)|(February)|(Feb)|(Mar)|(March)|(Apr)|(April)|(May)|(Jun)|(June)|(Jul)|(July)|(Aug)|(August)|(Sep)|(September)|(Oct)|(October)|(Nov)|(November)|(Dec)|(December)){1}(-|\/|\s|\.|\.+\s|)([12][1-9]?){1}(\,\s+|-|\/)([1][9][0-9][0-9]|[2][0][01][0-8]|[9][0-9]|[8][0-9])$

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <style>
+    </style>
+	<head>
+		<title>Logged in as {{ session["username"] }}</title>
+	</head>
+	<body>
+		<h1>Book an Appointment</h1>
+		<div style="display:inline-block;">
+			{% block menu %}
+            <a href="{{ url_for("logout") }}">Logout</a>
+            {% set messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <a style="margin-top: 20px">{{ message }}</a>
+            {% endfor %}
+        {% endif %}
+            <a></a>
+			{% endblock %}
+		</div>
+		<div>
+        <form style="margin-top:20px;align-items:right" action="{{ url_for("book") }}" method="POST" style="margin-top: 20px">
+                <p>
+                Patron:  <input type="text" name="patron" value="{{ session["username"] }}" />
+                <br />
+                </p>
+                Stylist:  <input type="text" name="stylist" value="{{ apt_args.stylist }}"/>
+                <br />
+                Year:   <input type="text" name="year" value="{{ apt_args.year }}"/>
+                <br />
+                Month:  <input type="text" name="month" value="{{ apt_args.month }}"/>
+                <br />
+                Day:  <input type="text" name="day" value="{{ apt_args.day }}" />
+                <br />
+                Time:  <input type="text" name="time" value="{{ apt_args.hour }}" />
+                <br />
+                {% block button %}
+                <input style="margin-top:10px" type="submit" name="book" value="Book" />
+                {% endblock %}
+        </form>
+	</body>
+</html>

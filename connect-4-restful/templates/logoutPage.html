@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Logged out</title>
+	</head>
+	<body>
+		You have successfully been logged out!
+		<a href="{{ url_for("login") }}">click here to login</a>
+	</body>
+<script>
+	window.onload = function() {
+		sessionStorage.removeItem("gameId");
+	}
+</script>
+</html>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Login {{ super() }}{% endblock %}
+
+
+{% block content %}
+{% if create %}
+{% set header = "New Player" %}
+{% else %}
+{% set header = "Login" %}
+{% endif %}
+<h1>{{ header }}</h1>
+<form action="" method="post">
+    {% if username %}
+    Username:  <input type="text" name="user" value={{ username }} />
+    <br />
+    {% else %}
+    Username:  <input type="text" name="user"/>
+    <br />
+    {% endif %}
+    {% if password %}
+    Password:  <input type="text" name="pass" value={{ password }} />
+    <br />
+    {% else %}
+    Password:  <input type="text" name="pass" />
+    <br />
+    {% endif %}
+
+    {% if create %}
+    Birthday:  <input type="text" name="bday" />
+    <br />
+    {% endif %}
+    {% block button %}
+    {% if not create %}
+    <input type="submit" name="submit_button" value="Login" />
+    {% endif %}
+    {% if not create %}
+    <input type="submit" name="submit_button" value="New Player" />
+    {% else %}
+    <input type="submit" name="submit_button" value="Create Player" />
+    {% endif %}
+    {% endblock %}
+</form>
+{% endblock %}
