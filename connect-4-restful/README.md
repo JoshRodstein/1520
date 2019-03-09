@@ -9,6 +9,19 @@ Pitt ID: 4021607
 2. Set the `FLASK_APP=connect4.py` environment variable and run `flask devinit`
 3. Run `flask run` and navigate to `localhost:5000`
 
+## Deploy w/ Docker
+
+ **Build**
+ 
+```docker build -t connect-four-restful:latest .```
+
+**Run**
+
+```docker run -it -d git -p 5000:5000 nos-mock-api:latest```
+
+
+
+
 
 # Defects Report 
 
