@@ -17,7 +17,7 @@ Pitt ID: 4021607
 
 **Run**
 
-```docker run -it -d git -p 5000:5000 nos-mock-api:latest```
+```docker run -it -d -p 5000:5000 connect-four-restful:latest```
 
 
 

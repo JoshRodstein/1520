@@ -175,5 +175,8 @@ def init_dev_data():
 
 
 if __name__ == "__main__":
-    app.run(threaded=True)
+    app.run(host='0.0.0.0', threaded=True)
+    init_db()
+    init_dev_data()
+
 
